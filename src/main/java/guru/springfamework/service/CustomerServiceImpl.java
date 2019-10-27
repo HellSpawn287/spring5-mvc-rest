@@ -16,12 +16,12 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    public void setCustomerMapper(CustomerMapper customerMapper){
-        this.customerMapper =customerMapper;
+    public void setCustomerMapper(CustomerMapper customerMapper) {
+        this.customerMapper = customerMapper;
     }
 
     @Autowired
-    public void setCustomerRepository(CustomerRepository customerRepository){
+    public void setCustomerRepository(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
@@ -53,5 +53,21 @@ public class CustomerServiceImpl implements CustomerService {
         returnDTO.setCustomerURL("/api/v1/customer/" + savedCustomer.getId());
 
         return returnDTO;
+    }
+
+    private CustomerDTO saveAndReturnDTO(Customer customer) {
+        Customer savedCustomer = customerRepository.save(customer);
+        CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
+        returnDTO.setCustomerURL("/api/v1/customer/" + savedCustomer.getId());
+
+        return returnDTO;
+    }
+
+    @Override
+    public CustomerDTO saveCustomerByDTO(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+        customer.setId(id);
+
+        return saveAndReturnDTO(customer);
     }
 }
