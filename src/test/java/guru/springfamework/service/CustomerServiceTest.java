@@ -69,7 +69,7 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void testCreateNewCustomer() {
+    public void CreateNewCustomer() {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname("Jim");
 

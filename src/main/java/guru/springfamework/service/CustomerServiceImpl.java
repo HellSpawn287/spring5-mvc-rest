@@ -15,6 +15,14 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
     private CustomerRepository customerRepository;
 
+    public CustomerServiceImpl() {
+    }
+
+    public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
+        this.customerMapper = customerMapper;
+        this.customerRepository = customerRepository;
+    }
+
     @Autowired
     public void setCustomerMapper(CustomerMapper customerMapper) {
         this.customerMapper = customerMapper;
@@ -70,4 +78,20 @@ public class CustomerServiceImpl implements CustomerService {
 
         return saveAndReturnDTO(customer);
     }
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id).map(customer -> {
+
+            if (customerDTO.getFirstname() != null) {
+                customer.setFirstname(customerDTO.getFirstname());
+            }
+            if (customerDTO.getLastname() != null) {
+                customer.setLastname(customerDTO.getLastname());
+            }
+            return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+
+        }).orElseThrow(RuntimeException::new); // TODO: implement better exception handling
+    }
+
 }
