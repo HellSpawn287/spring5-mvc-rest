@@ -54,19 +54,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
-        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
-        Customer savedCustomer = customerRepository.save(customer);
-
-        CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-        returnDTO.setCustomerURL("/api/v1/customer/" + savedCustomer.getId());
-
-        return returnDTO;
+        return saveAndReturnDTO(customerMapper.customerDTOToCustomer(customerDTO));
     }
 
     private CustomerDTO saveAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(savedCustomer);
-        returnDTO.setCustomerURL("/api/v1/customer/" + savedCustomer.getId());
+        returnDTO.setCustomerURL("/api/v1/customers/" + savedCustomer.getId());
 
         return returnDTO;
     }
@@ -89,7 +83,10 @@ public class CustomerServiceImpl implements CustomerService {
             if (customerDTO.getLastname() != null) {
                 customer.setLastname(customerDTO.getLastname());
             }
-            return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+            CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+            returnDTO.setCustomerURL("/api/v1/customers/" + id);
+
+            return returnDTO;
 
         }).orElseThrow(RuntimeException::new); // TODO: implement better exception handling
     }

@@ -85,7 +85,7 @@ public class CustomerServiceTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDTO.getCustomerURL());
+        assertEquals("/api/v1/customers/1", savedDTO.getCustomerURL());
 
     }
 
@@ -107,6 +107,6 @@ public class CustomerServiceTest {
 
         // then
         assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDTO.getCustomerURL());
+        assertEquals("/api/v1/customers/1", savedDTO.getCustomerURL());
     }
 }
