@@ -18,6 +18,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,7 +104,7 @@ public class CustomerControllerTest {
         when(customerService.createNewCustomer(customerDTO)).thenReturn(returnDTO);
 
         // then
-       mockMvc.perform(post("/api/v1/customers/")
+        mockMvc.perform(post("/api/v1/customers/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
@@ -138,7 +139,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void testPatchCustomer() throws Exception{
+    public void testPatchCustomer() throws Exception {
 
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setFirstname(f_NAME);
@@ -158,5 +159,14 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.firstname", equalTo(f_NAME)))
                 .andExpect(jsonPath("$.lastname", equalTo(l_NAME)))
                 .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+    }
+
+    @Test
+    public void testDeleteCustomerById() throws Exception {
+        mockMvc.perform(delete("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService).deleteCustomerById(anyLong());
     }
 }
