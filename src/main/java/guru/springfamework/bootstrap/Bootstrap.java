@@ -2,8 +2,10 @@ package guru.springfamework.bootstrap;
 
 import guru.springfamework.domain.Category;
 import guru.springfamework.domain.Customer;
+import guru.springfamework.domain.Vendor;
 import guru.springfamework.repositories.CategoryRepository;
 import guru.springfamework.repositories.CustomerRepository;
+import guru.springfamework.repositories.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -11,16 +13,19 @@ import org.springframework.stereotype.Component;
 public class Bootstrap implements CommandLineRunner {
     private CategoryRepository categoryRepository;
     private CustomerRepository customerRepository;
+    private VendorRepository vendorRepository;
 
-    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
+    public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository, VendorRepository vendorRepository) {
         this.categoryRepository = categoryRepository;
         this.customerRepository = customerRepository;
+        this.vendorRepository = vendorRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         loadCategories();
         loadCustomers();
+        loadVendors();
     }
 
     private void loadCustomers() {
@@ -68,6 +73,28 @@ public class Bootstrap implements CommandLineRunner {
 
         System.out.println("Data Loaded: " +
                 "\n numbers of categories = " + categoryRepository.count());
+    }
+
+    private void loadVendors() {
+        Vendor jim = new Vendor();
+        jim.setName("John's News");
+
+        Vendor sweetHome = new Vendor();
+        sweetHome.setName("Home Sweet Home");
+
+        Vendor peter = new Vendor();
+        peter.setName("True bread");
+
+        Vendor hanna = new Vendor();
+        hanna.setName("Youth&Beauty");
+
+        vendorRepository.save(jim);
+        vendorRepository.save(sweetHome);
+        vendorRepository.save(peter);
+        vendorRepository.save(hanna);
+
+        System.out.println("Data Loaded: " +
+                "\n numbers of vendors = " + vendorRepository.count());
     }
 
 }
